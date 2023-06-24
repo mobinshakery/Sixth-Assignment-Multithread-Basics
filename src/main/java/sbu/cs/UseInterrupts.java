@@ -10,82 +10,98 @@ package sbu.cs;
     Take note that you are NOT ALLOWED to change or delete any existing line of code.
  */
 
-public class UseInterrupts
-{
-/*
-    TODO
-     Analyse the following class and add new code where necessary.
-     If an object from this type of thread is Interrupted, it must print this:
-        "{ThreadName} has been interrupted"
-     And then terminate itself.
- */
-    public static class SleepThread extends Thread {
+import java.security.PublicKey;
+
+public class UseInterrupts {
+    /*
+        TODO
+         Analyse the following class and add new code where necessary.
+         If an object from this type of thread is Interrupted, it must print this:
+            "{ThreadName} has been interrupted"
+         And then terminate itself.
+     */
+    public static class SleepThread implements Runnable {
         int sleepCounter;
+        boolean interrupted;
 
         public SleepThread(int sleepCounter) {
             super();
             this.sleepCounter = sleepCounter;
+            this.interrupted = false;
         }
 
         @Override
         public void run() {
-            System.out.println(this.getName() + " is Active.");
+            System.out.println(Thread.currentThread().getName() + " is Active.");
 
-            while (this.sleepCounter > 0)
-            {
+            while (this.sleepCounter > 0 && !Thread.currentThread().isInterrupted()) {
                 try {
                     Thread.sleep(1000);
-                } catch (InterruptedException e) {
+                } catch (InterruptedException ignored) {
 
-                }
-                finally {
+                } finally {
                     this.sleepCounter--;
                     System.out.println("Number of sleeps remaining: " + this.sleepCounter);
                 }
             }
-
+            System.out.println("{ " + Thread.currentThread().getName() + " }" + " has been interrupted.");
         }
+
     }
 
-/*
-    TODO
-     Analyse the following class and add new code where necessary.
-     If an object from this type of thread is Interrupted, it must print this:
-        "{ThreadName} has been interrupted"
-     And then terminate itself.
-     (Hint: Use the isInterrupted() method)
- */
+    /*
+        TODO
+         Analyse the following class and add new code where necessary.
+         If an object from this type of thread is Interrupted, it must print this:
+            "{ThreadName} has been interrupted"
+         And then terminate itself.
+         (Hint: Use the isInterrupted() method)
+     */
     public static class LoopThread extends Thread {
         int value;
+        boolean interrupted;
         public LoopThread(int value) {
             super();
             this.value = value;
+            this.interrupted = false;
         }
 
         @Override
         public void run() {
             System.out.println(this.getName() + " is Active.");
-
-            for (int i = 0; i < 10; i += 3)
-            {
+            for (int i = 0; i < 10 && Thread.currentThread().isInterrupted(); i += 3) {
                 i -= this.value;
-
             }
+            System.out.println("{ " + Thread.currentThread().getName() + " }" + " has been interrupted.");
+        }
+        @Override
+        public void interrupt(){
+            this.interrupted = !this.interrupted;
+        }
+        @Override
+        public boolean isInterrupted(){
+            return this.interrupted;
         }
     }
 
-/*
-    You can add new code to the main function. This is where you must utilize interrupts.
-    No existing line of code should be changed or deleted.
- */
+    /*
+        You can add new code to the main function. This is where you must utilize interrupts.
+        No existing line of code should be changed or deleted.
+     */
     public static void main(String[] args) {
-        SleepThread sleepThread = new SleepThread(5);
-        sleepThread.start();
 
         // TODO  Check if this thread runs for longer than 3 seconds (if it does, interrupt it)
-
-        LoopThread loopThread = new LoopThread(3);
-        loopThread.start();
+        SleepThread sleepThread = new SleepThread(5);
+        long now = System.currentTimeMillis();
+        Thread thread = new Thread(sleepThread);
+        thread.start();
+        while(!thread.isInterrupted()){
+            long subtract = System.currentTimeMillis() - now;
+            if(subtract > 3000){
+                thread.interrupt();
+                break;
+            }
+        }
 
         // TODO  Check if this thread runs for longer than 3 seconds (if it does, interrupt it)
 

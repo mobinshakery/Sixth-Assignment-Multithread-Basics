@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="sbu.cs.FindMultiplesTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2023-05-26T13:30:05" hostname="DESKTOP-541PK6S" time="0.046">
+  <properties/>
+  <testcase name="testOne()" classname="sbu.cs.FindMultiplesTest" time="0.014"/>
+  <testcase name="testSix()" classname="sbu.cs.FindMultiplesTest" time="0.002"/>
+  <testcase name="testTwo()" classname="sbu.cs.FindMultiplesTest" time="0.002"/>
+  <testcase name="testThree()" classname="sbu.cs.FindMultiplesTest" time="0.002"/>
+  <testcase name="testFive()" classname="sbu.cs.FindMultiplesTest" time="0.018"/>
+  <testcase name="testFour()" classname="sbu.cs.FindMultiplesTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
